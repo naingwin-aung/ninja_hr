@@ -14,6 +14,14 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+.btn {
+  font-size: 14px!important;
+}
+
+.badge {
+  padding: 10px;
+}
+
 .app_bar {
     padding: 13px 0;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
@@ -21,9 +29,19 @@ body {
 
 .bottom_bar {
     position: fixed;
+    background-color: white;
     bottom: 0;
     width: 100%;
+    margin-top : 20px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.custom-control-label {
+  cursor: pointer!important;
+}
+
+.create_form {
+  margin-bottom: 60px;
 }
 
 .bottom_bar a {
@@ -521,4 +539,12 @@ body {
         width: 220px;
     }
 }
-  
+
+/*----------Datatable -----*/
+.pagination .page-item.active .page-link {
+  background-color: #4cd195;
+}
+
+.pagination .page-item.active .page-link:hover {
+  background-color: #4cd195!important;
+}
