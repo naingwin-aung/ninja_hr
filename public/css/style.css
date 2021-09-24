@@ -14,6 +14,11 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+.main-content {
+  margin-top: 20px;
+  margin-bottom: 80px;
+}
+
 .btn {
   font-size: 14px!important;
 }
@@ -30,6 +35,7 @@ body {
 .bottom_bar {
     position: fixed;
     background-color: white;
+    z-index: 999999;
     bottom: 0;
     width: 100%;
     margin-top : 20px;
@@ -534,10 +540,24 @@ body {
 
   /*responsive for mobile*/
 
-@media only screen and (max-width: 640px) {
+@media screen and (max-width: 680px) {
     .sidebar-wrapper {
         width: 220px;
     }
+
+    .dataTables_filter input[type='search'] {
+      width: 240px !important;
+    }
+
+    div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_filter, div.dataTables_wrapper div.dataTables_info, div.dataTables_wrapper div.dataTables_paginate {
+      text-align: left !important;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1024px){
+  .dataTables_filter input[type='search'] {
+    width: 140px!important;
+  }
 }
 
 /*----------Datatable -----*/
@@ -547,4 +567,35 @@ body {
 
 .pagination .page-item.active .page-link:hover {
   background-color: #4cd195!important;
+}
+
+table.dataTable>tbody>tr.child ul.dtr-details {
+  width: 100%;
+}
+
+table.dataTable>tbody>tr.child ul.dtr-details>li {
+  text-align: left !important;
+}
+
+@media screen and (max-width: 767px) {
+  div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+      justify-content: start!important;
+  }
+}
+
+.paginate_button {
+  font-size: 14px !important;
+  color : #fff!important;
+  background-color: #ddd!important;
+  margin: 0px 2px;
+}
+
+.action_icon a{
+  padding: 5px;
+  background: #eee;
+  border-radius: 5px;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  margin: 3px!important;
 }

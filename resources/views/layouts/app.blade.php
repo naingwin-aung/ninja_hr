@@ -22,6 +22,10 @@
     <!--Databale -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.2/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+    {{-- Responsive Datatable --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.2.8/css/rowReorder.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
 </head>
 <body>
     <div class="page-wrapper chiller-theme">
@@ -99,9 +103,9 @@
             <div class="d-flex justify-content-center">
                 <div class="col-md-8">
                    <div class="d-flex justify-content-between">
-                        <a id="show-sidebar" href="#">
-                            <i class="fas fa-bars"></i>
-                        </a>
+                    <a id="show-sidebar" href="#">
+                        <i class="fas fa-bars"></i>
+                    </a>
                     <h4 class="mb-0">@yield('title')</h4>
                     <a href=""></a>
                    </div>
@@ -157,42 +161,87 @@
 {{-- DateRange Picker --}}
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+<!-- Laravel Javascript Validation -->
+<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+
+{{-- Sweet Alert 2 --}}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{{-- Responsive DataTable --}}
+
+<script src="https://cdn.datatables.net/rowreorder/1.2.8/js/dataTables.rowReorder.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 @yield('script')
 <script>
     jQuery(function ($) {
+      $(".sidebar-dropdown > a").click(function() {
+          $(".sidebar-submenu").slideUp(200);
+          if (
+              $(this)
+              .parent()
+              .hasClass("active")
+              ) {
+              $(".sidebar-dropdown").removeClass("active");
+              $(this)
+              .parent()
+              .removeClass("active");
+          } else {
+              $(".sidebar-dropdown").removeClass("active");
+              $(this)
+              .next(".sidebar-submenu")
+              .slideDown(200);
+              $(this)
+              .parent()
+              .addClass("active");
+          }
+      });
 
-    $(".sidebar-dropdown > a").click(function() {
-        $(".sidebar-submenu").slideUp(200);
-        if (
-            $(this)
-            .parent()
-            .hasClass("active")
-            ) {
-            $(".sidebar-dropdown").removeClass("active");
-            $(this)
-            .parent()
-            .removeClass("active");
-        } else {
-            $(".sidebar-dropdown").removeClass("active");
-            $(this)
-            .next(".sidebar-submenu")
-            .slideDown(200);
-            $(this)
-            .parent()
-            .addClass("active");
+      $("#close-sidebar").click(function(e) {
+          e.preventDefault();
+          $(".page-wrapper").removeClass("toggled");
+          $("#show-sidebar").removeClass('hide_sidebar');
+          document.body.style.backgroundColor = 'white';
+      });
+
+      $("#show-sidebar").click(function(e) {
+          e.preventDefault();
+          $(".page-wrapper").addClass("toggled");
+          $(this).addClass('hide_sidebar');
+      });
+
+      document.addEventListener('click', function(event) {
+        if(document.getElementById('show-sidebar').contains(event.target)) {
+          $(".page-wrapper").addClass("toggled");
+          $("show-sidebar").addClass('hide_sidebar');
+          document.body.style.backgroundColor = '#eee';
+        }else if(!document.getElementById('sidebar').contains(event.target)) {
+          $(".page-wrapper").removeClass("toggled");
+          $("#show-sidebar").removeClass('hide_sidebar');
+          document.body.style.backgroundColor = 'white';
         }
-    });
+      });
+      
 
-    $("#close-sidebar").click(function(e) {
-        e.preventDefault();
-        $(".page-wrapper").removeClass("toggled");
-        $("#show-sidebar").removeClass('hide_sidebar');
-    });
-    $("#show-sidebar").click(function(e) {
-        e.preventDefault();
-        $(".page-wrapper").addClass("toggled");
-        $(this).addClass('hide_sidebar');
-    });
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        width : '30em',
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
+      
+      @if(session('create')) 
+        Toast.fire({
+          icon: 'success',
+          title: '{{session('create')}}'
+        })
+      @endif
     });
 </script>
 </body>
