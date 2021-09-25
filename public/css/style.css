@@ -599,3 +599,12 @@ table.dataTable>tbody>tr.child ul.dtr-details>li {
   display: inline-block;
   margin: 3px!important;
 }
+
+/* -------Preview Img */
+.preview_img img {
+  width: 100px;
+  border-radius: 3px;
+  padding: 3px;
+  margin: 3px;
+  border: 1px solid #eee;
+}
