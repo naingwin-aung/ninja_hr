@@ -36,6 +36,7 @@ class StoreEmployeeRequest extends FormRequest
             'date_of_join' => 'required',
             'is_present' => 'required',
             'password' => 'required|min:6|max:20',
+            'profile_img' => 'required|image'
         ];
     }
 }

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreEmployeeRequest;
@@ -64,7 +65,18 @@ class EmployeeController extends Controller
 
     public function update($id, UpdateEmployeeRequest $request) {
         $employee = User::findOrFail($id);
-        $employee->update($request->only('employee_id', 'name', 'phone', 'email', 'nrc_number', 'gender', 'birthday', 'address', 'department_id', 'date_of_join', 'is_present'));
+
+        $profile_img_name = $employee->profile_img;
+
+        if($request->hasFile('profile_img')) {
+            Storage::disk('public')->delete('employee/'. $employee->profile_img);
+
+            $profile_img_file = $request->file('profile_img');
+            $profile_img_name = uniqid(). '_'. time() . '.' . $profile_img_file->getClientOriginalExtension();
+            Storage::disk('public')->put('employee/' . $profile_img_name, file_get_contents($profile_img_file));
+        }
+
+        $employee->update($request->only('employee_id', 'name', 'phone', 'email', 'nrc_number', 'gender', 'birthday', 'address', 'department_id', 'date_of_join', 'is_present') + ['profile_img' => $profile_img_name]);
 
         if($request->filled('password')) {
             $employee->update($request->only('password'));
@@ -78,10 +90,21 @@ class EmployeeController extends Controller
         return view('employee.show', compact('employee'));
     }
 
+    public function destroy(User $employee) 
+    {
+        $employee->delete();
+        return 'success';
+    }
+
     public function ssd()
     {
         $employees = User::with('department');
         return datatables($employees)
+            ->filterColumn('department_name', function($query, $keyword) {
+                $query->whereHas('department', function($q1) use($keyword) {
+                    $q1->where('title', 'like', '%'.$keyword.'%');
+                });
+            })
             ->addColumn('department_name', function($each) {
                 return $each->department ? $each->department->title : '-';
             })
@@ -99,12 +122,21 @@ class EmployeeController extends Controller
                     Carbon::parse($each->updated_at)->toFormattedDateString() . ' - ' .
                     Carbon::parse($each->updated_at)->format('H:i:s A');
             })
+            ->addColumn('profile_img', function($each) {
+                return '<img src="'.$each->profile_img_path().'" class="profile_thumbnail" /><p class="my-1">'.$each->name.'</p>';
+            })
             ->addColumn('action', function($each) {
                 $edit_icon = '<a href="'.route('employee.edit', $each->id).'" class="text-warning"><i class="fas fa-user-edit"></i></a>';
                 $info_icon = '<a href="'.route('employee.show', $each->id).'" class="text-primary"><i class="fas fa-info-circle"></i></a>';
+
+                if($each->id !== Auth::user()->id) {
+                    $delete_icon = '<a href="#" class="text-danger delete_btn" data-id="'.$each->id.'"><i class="fas fa-trash"></i></a>';
+                    return '<div class="action_icon">'. $edit_icon . $info_icon . $delete_icon .'</div>';
+                }
+
                 return '<div class="action_icon">'. $edit_icon . $info_icon .'</div>';
             })
-            ->rawColumns(['is_present', 'action'])    
+            ->rawColumns(['is_present', 'action', 'profile_img'])    
             ->toJson();
     }
 }

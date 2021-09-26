@@ -48,7 +48,16 @@ class User extends Authenticatable
 
     public function setPasswordAttribute($value)
     {
-        $this->attributes['password'] = Hash::make($value);
+        $this->attributes['password'] = Hash::make($value); 
+    }
+
+    public function profile_img_path()
+    {
+        if($this->profile_img) {
+            return asset('storage/employee/'. $this->profile_img);
+        }
+
+        return null;
     }
 
     public function department() {

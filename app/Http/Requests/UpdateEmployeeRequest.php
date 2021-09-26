@@ -38,6 +38,7 @@ class UpdateEmployeeRequest extends FormRequest
             'date_of_join' => 'required',
             'is_present' => 'required',
             'password' => 'nullable|min:6|max:20',
+            'profile_img' => 'nullable|image'
         ];
     }
 }

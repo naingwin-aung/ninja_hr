@@ -7,7 +7,7 @@
 
         @include('layouts.flash')
 
-        <form action="{{route('employee.update', $employee->id)}}" method="POST" id="employee_update" autocomplete="off">
+        <form action="{{route('employee.update', $employee->id)}}" method="POST" id="employee_update" autocomplete="off" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -90,6 +90,19 @@
                     @endif>No</option>
                 </select>
             </div>
+            <div class="form-group">
+                <label>Profile Images</label>
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                      <input type="file" class="form-control p-1" name="profile_img" id="profile_img">
+                    </div>
+                </div>
+                <div class="preview_img">
+                    @if ($employee->profile_img)
+                        <img src="{{$employee->profile_img_path()}}" alt="employee_img">
+                    @endif
+                </div>
+            </div>
             <div class="md-form">
                 <label>Password</label>
                 <input type="text" name="password" class="form-control">
@@ -127,6 +140,14 @@
                 "autoApply": true,
                 "showDropdowns": true,
             });
+
+            $('#profile_img').on('change', function() {
+                let file_length = document.getElementById('profile_img').files.length;
+                $('.preview_img').html('');
+                for(let i = 0; i < file_length ; i++) {
+                    $('.preview_img').append(`<img src="${URL.createObjectURL(event.target.files[i])}" />`)
+                }
+            })
         })
     </script>
 @endsection

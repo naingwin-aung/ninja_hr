@@ -10,14 +10,14 @@
             <table class="table table-bordered" id="datatable" style="width:100%;">
                 <thead>
                     <th class="text-center no_sort no_search"></th>
+                    <th class="text-center no_sort">Profile</th>
                     <th class="text-center">Employee ID</th>
-                    <th class="text-center">Name</th>
                     <th class="text-center no_sort">Phone</th>
                     <th class="text-center no_sort">Email</th>
-                    <th class="text-center no_sort">Department</th>
+                    <th class="text-center">Department</th>
                     <th class="text-center no_sort no_search">Is Present?</th>
                     <th class="text-center no_sort no_search">Action</th>
-                    <th class="text-center hidden no_sort no_search">Updated At</th>
+                    <th class="text-center hidden no_search">Updated At</th>
                 </thead>
             </table>
         </div>
@@ -26,15 +26,15 @@
 @section('script')
 <script>
     $(document).ready(function() {
-        $('#datatable').DataTable( {
+        let table = $('#datatable').DataTable( {
             responsive: true,
             processing: true,
             serverSide: true,
             ajax: "/employee/datatable/ssd",
             columns : [
                 {data: 'plus-icon', name: 'plus-icon', class: 'text-center'},
+                {data: 'profile_img', name: 'profile_img', class: 'text-center'},
                 {data: 'employee_id', name: 'employee_id', class: 'text-center'},
-                {data: 'name', name: 'name', class: 'text-center'},
                 {data: 'phone', name: 'phone', class: 'text-center'},
                 {data: 'email', name: 'email', class: 'text-center'},
                 {data: 'department_name', name: 'department_name', class: 'text-center'},
@@ -42,7 +42,7 @@
                 {data: 'action', name: 'action', class: 'text-center'},
                 {data: 'updated_at', name: 'updated_at', class: 'text-center'},
             ],
-            order : [[ 6 , "desc"]],
+            order : [[ 8 , "desc"]],
             language: {
                 "paginate": {
                     "previous": "<i class='fas fa-caret-left'> </i>",
@@ -70,6 +70,27 @@
                 },
             ],
         } );
+
+        $(document).on('click', '.delete_btn', function(e) {
+            e.preventDefault();
+            swal({
+                title: "Are you sure?",
+                text: "Are you sure you want to delete this employee!",
+                buttons: true,
+                dangerMode: true,
+                })
+                .then((willDelete) => {
+                if (willDelete) {
+                    let id = $(this).data('id');
+                    $.ajax({
+                        method : 'DELETE',
+                        url : `/employee/${id}`,
+                    }).done(function(res) {
+                        table.ajax.reload();
+                    })
+                }
+            });
+        })
     } );
 </script>
 @endsection

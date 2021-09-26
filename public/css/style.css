@@ -12,6 +12,7 @@ body {
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
+    background-color: #edf2f6;
 }
 
 .main-content {
@@ -30,12 +31,13 @@ body {
 .app_bar {
     padding: 13px 0;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    background-color: white;
 }
 
 .bottom_bar {
     position: fixed;
     background-color: white;
-    z-index: 999999;
+    /* z-index: 999999; */
     bottom: 0;
     width: 100%;
     margin-top : 20px;
@@ -552,6 +554,10 @@ body {
     div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_filter, div.dataTables_wrapper div.dataTables_info, div.dataTables_wrapper div.dataTables_paginate {
       text-align: left !important;
     }
+
+    .dash-border {
+      border-left: none!important;
+    }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1024px){
@@ -606,5 +612,25 @@ table.dataTable>tbody>tr.child ul.dtr-details>li {
   border-radius: 3px;
   padding: 3px;
   margin: 3px;
+  border: 1px solid #eee;
+}
+
+.profile_img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  padding: 3px;
+  border: 1px solid #4cd195;
+}
+
+.dash-border {
+  border-left: 1px dashed #4cd195;
+}
+
+.profile_thumbnail {
+  width: 70px;
+  height: 70px;
+  border-radius: 5px;
+  padding: 3px;
   border: 1px solid #eee;
 }

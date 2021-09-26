@@ -165,9 +165,12 @@
 <!-- Laravel Javascript Validation -->
 <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
 
+
 {{-- Sweet Alert 2 --}}
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+{{-- Sweet Alert 1 --}}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 {{-- Responsive DataTable --}}
 
 <script src="https://cdn.datatables.net/rowreorder/1.2.8/js/dataTables.rowReorder.min.js"></script>
@@ -175,6 +178,18 @@
 @yield('script')
 <script>
     jQuery(function ($) {
+      let token = document.head.querySelector("meta[name='csrf-token']");
+
+        if(token) {
+            $.ajaxSetup({
+                headers : {
+                    'X-CSRF-TOKEN' : token.content
+                }
+            })
+        }else {
+          console.log('CSRF token not found');
+        }
+
       $(".sidebar-dropdown > a").click(function() {
           $(".sidebar-submenu").slideUp(200);
           if (
@@ -201,7 +216,7 @@
           e.preventDefault();
           $(".page-wrapper").removeClass("toggled");
           $("#show-sidebar").removeClass('hide_sidebar');
-          document.body.style.backgroundColor = 'white';
+          document.body.style.backgroundColor = '#edf2f6';
       });
 
       $("#show-sidebar").click(function(e) {
@@ -218,7 +233,7 @@
         }else if(!document.getElementById('sidebar').contains(event.target)) {
           $(".page-wrapper").removeClass("toggled");
           $("#show-sidebar").removeClass('hide_sidebar');
-          document.body.style.backgroundColor = 'white';
+          document.body.style.backgroundColor = '#edf2f6';
         }
       });
       
