@@ -30,7 +30,7 @@ class UpdateEmployeeRequest extends FormRequest
             'name' => 'required',
             'phone' => ['required','numeric','regex:/^(09|\+?950?9|\+?95950?9)\d{7,9}$/','unique:users,phone,' . $id],
             'email' => 'required|email|unique:users,email,' . $id,
-            'nrc_number'=> 'required|unique:users,nrc_number,'.$id,
+            'nrc_number'=> 'required|unique:users,nrc_number,' .$id,
             'gender' => 'required',
             'birthday' => 'required',
             'address' => 'required',

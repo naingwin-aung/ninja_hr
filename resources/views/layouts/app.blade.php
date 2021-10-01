@@ -22,6 +22,7 @@
     <!--Databale -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.2/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    
 
     {{-- Responsive Datatable --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.2.8/css/rowReorder.dataTables.min.css">
@@ -39,14 +40,14 @@
             </div>
             <div class="sidebar-header">
               <div class="user-pic">
-                <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
+                <img class="img-responsive img-rounded" src="{{auth()->user()->profile_img_path()}}"
                   alt="User picture">
               </div>
               <div class="user-info">
-                <span class="user-name">Jhon
-                  <strong>Smith</strong>
+                <span class="user-name">
+                  {{auth()->user()->name}}
                 </span>
-                <span class="user-role">Administrator</span>
+                <span class="user-role">{{auth()->user()->department ? auth()->user()->department->title : 'No Deparment'}}</span>
                 <span class="user-status">
                   <i class="fa fa-circle"></i>
                   <span>Online</span>
@@ -65,11 +66,17 @@
                   </a>
                 </li>
                 <li>
-                    <a href="{{route('employee.index')}}">
-                      <i class="fa fa-user"></i>
-                      <span>Employees</span>
-                    </a>
-                  </li>
+                  <a href="{{route('employee.index')}}">
+                    <i class="fa fa-user"></i>
+                    <span>Employees</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="{{route('department.index')}}">
+                    <i class="fa fa-sitemap"></i>
+                    <span>Department</span>
+                  </a>
+                </li>
                 {{-- <li class="sidebar-dropdown">
                   <a href="#">
                     <i class="fa fa-shopping-cart"></i>
@@ -103,9 +110,15 @@
             <div class="d-flex justify-content-center">
                 <div class="col-md-8">
                    <div class="d-flex justify-content-between">
-                    <a id="show-sidebar" href="#">
-                        <i class="fas fa-bars"></i>
-                    </a>
+                    @if (request()->is('/'))
+                      <a id="show-sidebar" href="#">
+                          <i class="fas fa-bars"></i>
+                      </a>
+                    @else
+                      <a id="back-btn" href="#">
+                        <i class="fas fa-chevron-left"></i>
+                      </a>
+                    @endif
                     <h4 class="mb-0">@yield('title')</h4>
                     <a href=""></a>
                    </div>
@@ -123,7 +136,7 @@
             <div class="d-flex justify-content-center">
                 <div class="col-md-8">
                     <div class="d-flex justify-content-between">
-                        <a href="">
+                        <a href="{{route('home')}}">
                             <i class="fas fa-home"></i>
                             <p class="mb-0">Home</p>
                         </a>
@@ -135,9 +148,9 @@
                             <i class="fas fa-home"></i>
                             <p class="mb-0">Home</p>
                         </a>
-                        <a href="">
-                            <i class="fas fa-home"></i>
-                            <p class="mb-0">Home</p>
+                        <a href="{{route("employee.profile")}}">
+                            <i class="fas fa-user"></i>
+                            <p class="mb-0">Profile</p>
                         </a>
                     </div>
                 </div>
@@ -157,6 +170,8 @@
 <!--Datatable-->
 <script src="https://cdn.datatables.net/1.11.2/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.2/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/g/mark.js(jquery.mark.min.js)"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.js"></script>
 
 {{-- DateRange Picker --}}
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -226,15 +241,15 @@
       });
 
       document.addEventListener('click', function(event) {
-        if(document.getElementById('show-sidebar').contains(event.target)) {
-          $(".page-wrapper").addClass("toggled");
-          $("show-sidebar").addClass('hide_sidebar');
-          document.body.style.backgroundColor = '#eee';
-        }else if(!document.getElementById('sidebar').contains(event.target)) {
-          $(".page-wrapper").removeClass("toggled");
-          $("#show-sidebar").removeClass('hide_sidebar');
-          document.body.style.backgroundColor = '#edf2f6';
-        }
+          if(document.getElementById('show-sidebar') && document.getElementById('show-sidebar').contains(event.target)) {
+            $(".page-wrapper").addClass("toggled");
+            $("show-sidebar").addClass('hide_sidebar');
+            document.body.style.backgroundColor = '#eee';
+          }else if(!document.getElementById('sidebar').contains(event.target)) {
+            $(".page-wrapper").removeClass("toggled");
+            $("#show-sidebar").removeClass('hide_sidebar');
+            document.body.style.backgroundColor = '#edf2f6';
+          }
       });
       
 
@@ -264,6 +279,18 @@
           title: '{{session('update')}}'
         })
       @endif
+
+      $("#back-btn").click(function(e) {
+        e.preventDefault();
+        window.history.go(-1);
+        return false;
+      })
+
+      $.extend(true, $.fn.dataTable.defaults, {
+          processing: true,
+          serverSide: true,
+          mark: true,
+      });
     });
 </script>
 </body>

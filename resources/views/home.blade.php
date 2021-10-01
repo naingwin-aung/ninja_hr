@@ -2,23 +2,20 @@
 @section('title', 'Ninja HR')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
+    <div class="card">
+        <div class="card-body">
+            <div class="col-md-12 text-center">
+                <div class="text-center">
+                    <img src="{{$employee->profile_img_path()}}" alt="employee_img" class="profile_img shadow">
+                    <div class="py-3 px-3">
+                        <div>
+                            <h4 class="mb-2">{{$employee->name}}</h4>
+                            <p class="mb-2"><span class="text-muted"># {{$employee->employee_id}}</span> | <span class="text-theme">{{$employee->phone}}</span></p>
+                            <p class="text-muted badge badge-pill badge-light">{{$employee->department ? $employee->department->title : ' - '}}</p>
                         </div>
-                    @endif
-
-                    {{ __('You are logged in!') }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection

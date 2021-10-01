@@ -7,12 +7,20 @@
     color: white!important;
 }
 
+.text-theme {
+  color: #3aa977;
+}
+
 body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
     background-color: #edf2f6;
+}
+
+table.dataTable td, table.dataTable th {
+  vertical-align: middle;
 }
 
 .main-content {
@@ -26,6 +34,11 @@ body {
 
 .badge {
   padding: 10px;
+  box-shadow: none!important;
+}
+
+.user-pic {
+  margin-right: 7px!important;
 }
 
 .app_bar {
@@ -232,6 +245,9 @@ body {
   
   .sidebar-wrapper .sidebar-header .user-pic img {
     object-fit: cover;
+    background-color: #eee;
+    padding: 3px;
+    border-radius: 5px;
     height: 100%;
     width: 100%;
   }
@@ -466,13 +482,13 @@ body {
   /*-----------------------------chiller-theme-------------------------------------------------*/
   
   .chiller-theme .sidebar-wrapper {
-      background: #31353D;
+      background: #2d3747;
   }
   
   .chiller-theme .sidebar-wrapper .sidebar-header,
   .chiller-theme .sidebar-wrapper .sidebar-search,
   .chiller-theme .sidebar-wrapper .sidebar-menu {
-      border-top: 1px solid #3a3f48;
+      border-top: 1px solid #2d3747;
   }
   
   .chiller-theme .sidebar-wrapper .sidebar-search input.search-menu,
@@ -511,7 +527,7 @@ body {
   .chiller-theme .sidebar-wrapper .sidebar-dropdown .sidebar-submenu li a:hover:before,
   .chiller-theme .sidebar-wrapper .sidebar-search input.search-menu:focus+span,
   .chiller-theme .sidebar-wrapper .sidebar-menu .sidebar-dropdown.active a i {
-      color: #16c7ff;
+      color: #4cd195;
       text-shadow:0px 0px 10px rgba(22, 199, 255, 0.5);
   }
   
@@ -600,6 +616,7 @@ table.dataTable>tbody>tr.child ul.dtr-details>li {
   padding: 5px;
   background: #eee;
   border-radius: 5px;
+  text-align: center;
   width: 30px;
   height: 30px;
   display: inline-block;
@@ -616,8 +633,8 @@ table.dataTable>tbody>tr.child ul.dtr-details>li {
 }
 
 .profile_img {
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   padding: 3px;
   border: 1px solid #4cd195;
@@ -633,4 +650,13 @@ table.dataTable>tbody>tr.child ul.dtr-details>li {
   border-radius: 5px;
   padding: 3px;
   border: 1px solid #eee;
+}
+
+mark{
+  background:#4cd195;
+  color:black;
+}
+
+.mark, mark {
+  padding: 0px !important;
 }
