@@ -8,50 +8,53 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Permission;
 use App\Http\Requests\StoreDepartmentRequest;
+use App\Http\Requests\StorePermissionRequest;
 use App\Http\Requests\UpdateDepartmentRequest;
+use App\Http\Requests\UpdatePermissionRequest;
 
-class DepartmentController extends Controller
+class PermissionController extends Controller
 {
     public function index()
     {
-        return view('department.index');
+        return view('permission.index');
     }
 
     public function create()
     {
-        return view('department.create');
+        return view('permission.create');
     }
 
-    public function store(StoreDepartmentRequest $request)
+    public function store(StorePermissionRequest $request)
     {
-        Department::create($request->only('title'));
+        Permission::create($request->only('name'));
 
-        return redirect()->route('department.index')->with('create', 'Department is Successfully Create');
+        return redirect()->route('permission.index')->with('create', 'Permission is Successfully Create');
     }
 
-    public function edit(Department $department)
+    public function edit(Permission $permission)
     {
-        return view('department.edit', compact('department'));
+        return view('permission.edit', compact('permission'));
     }
 
-    public function update($id, UpdateDepartmentRequest $request) {
-        $department = Department::findOrFail($id);
-        $department->update($request->only('title'));
+    public function update($id, UpdatePermissionRequest $request) {
+        $permission = Permission::findOrFail($id);
+        $permission->update($request->only('name'));
 
-        return redirect()->route('department.index')->with('update', 'Department is Successfully Update');
+        return redirect()->route('permission.index')->with('update', 'Permission is Successfully Update');
     }
 
-    public function destroy(Department $department) 
+    public function destroy(Permission $permission) 
     {
-        $department->delete();
+        $permission->delete();
         return 'success';
     }
 
     public function ssd()
     {
-        $departments = Department::query();
-        return datatables($departments)
+        $permissions = Permission::query();
+        return datatables($permissions)
             ->addColumn('plus-icon', function($each) {
                 return null;
             })
@@ -61,7 +64,7 @@ class DepartmentController extends Controller
                     Carbon::parse($each->updated_at)->format('H:i:s A');
             })
             ->addColumn('action', function($each) {
-                $edit_icon = '<a href="'.route('department.edit', $each->id).'" class="text-warning"><i class="fas fa-user-edit"></i></a>';
+                $edit_icon = '<a href="'.route('permission.edit', $each->id).'" class="text-warning"><i class="fas fa-user-edit"></i></a>';
                 $delete_icon = '<a href="#" class="text-danger delete_btn" data-id="'.$each->id.'"><i class="fas fa-trash"></i></a>';
                 return '<div class="action_icon">'. $edit_icon . $delete_icon .'</div>';
             })

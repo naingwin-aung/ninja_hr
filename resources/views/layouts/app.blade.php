@@ -77,6 +77,18 @@
                     <span>Department</span>
                   </a>
                 </li>
+                <li>
+                  <a href="{{route('role.index')}}">
+                    <i class="fa fa-shield-alt"></i>
+                    <span>Role</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="{{route('permission.index')}}">
+                    <i class="fa fa-user-shield"></i>
+                    <span>Permission</span>
+                  </a>
+                </li>
                 {{-- <li class="sidebar-dropdown">
                   <a href="#">
                     <i class="fa fa-shopping-cart"></i>
@@ -287,8 +299,6 @@
       })
 
       $.extend(true, $.fn.dataTable.defaults, {
-          processing: true,
-          serverSide: true,
           mark: true,
       });
     });

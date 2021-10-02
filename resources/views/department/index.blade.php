@@ -22,6 +22,8 @@
 <script>
     $(document).ready(function() {
         let table = $('#datatable').DataTable( {
+            processing: true,
+            serverSide: true,
             responsive: true,
             ajax: "/department/datatable/ssd",
             columns : [
