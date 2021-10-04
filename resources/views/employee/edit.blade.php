@@ -73,6 +73,18 @@
             </div>
             <div class="md-form">
                 <div class="mb-4">
+                    <label>Role Or Designation</label><br/>
+                </div>
+                <select name="roles[]" class="select_ninja form-control" multiple>
+                    @foreach ($roles as $role)
+                        <option value="{{$role->id}}" @if (in_array($role->id, $old_roles))
+                            selected
+                        @endif>{{$role->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="md-form">
+                <div class="mb-4">
                     <label>Date of Join</label><br/>
                 </div>
                 <input type="text" name="date_of_join" id="date_of_join" class="form-control" value="{{$employee->date_of_join}}">

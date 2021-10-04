@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -21,8 +22,9 @@ class EmployeeController extends Controller
 
     public function create()
     {
+        $roles = Role::get();
         $departments = Department::orderBy('title')->get();
-        return view('employee.create', compact('departments'));
+        return view('employee.create', compact('departments', 'roles'));
     }
 
     public function store(StoreEmployeeRequest $request)
@@ -52,7 +54,9 @@ class EmployeeController extends Controller
         // $employee->save();
 
         //use Mutator
-        User::create($request->only('employee_id', 'name', 'phone', 'email', 'nrc_number', 'gender', 'birthday', 'address', 'department_id', 'date_of_join', 'is_present', 'password') + ['profile_img' => $profile_img_name]);
+        $employee = User::create($request->only('employee_id', 'name', 'phone', 'email', 'nrc_number', 'gender', 'birthday', 'address', 'department_id', 'date_of_join', 'is_present', 'password') + ['profile_img' => $profile_img_name]);
+
+        $employee->syncRoles($request->roles);
 
         return redirect()->route('employee.index')->with('create', 'Employee is Successfully Create');
     }
@@ -60,7 +64,9 @@ class EmployeeController extends Controller
     public function edit(User $employee)
     {
         $departments = Department::orderBy('title')->get();
-        return view('employee.edit', compact('employee', 'departments'));
+        $roles = Role::get();
+        $old_roles = $employee->roles->pluck('id')->toArray();
+        return view('employee.edit', compact('employee', 'departments', 'roles', 'old_roles'));
     }
 
     public function update($id, UpdateEmployeeRequest $request) {
@@ -77,6 +83,8 @@ class EmployeeController extends Controller
         }
 
         $employee->update($request->only('employee_id', 'name', 'phone', 'email', 'nrc_number', 'gender', 'birthday', 'address', 'department_id', 'date_of_join', 'is_present') + ['profile_img' => $profile_img_name]);
+
+        $employee->syncRoles($request>ro);
 
         if($request->filled('password')) {
             $employee->update($request->only('password'));
@@ -104,6 +112,14 @@ class EmployeeController extends Controller
                 $query->whereHas('department', function($q1) use($keyword) {
                     $q1->where('title', 'like', '%'.$keyword.'%');
                 });
+            })
+            ->addColumn('role_name', function($each) {
+                $output = '';
+                foreach($each->roles as $role) {
+                    $output .=  '<span class="badge badge-pill badge-primary m-1">'.$role->name.'</span>';
+                }
+
+                return $output;
             })
             ->addColumn('department_name', function($each) {
                 return $each->department ? $each->department->title : '-';
@@ -136,7 +152,7 @@ class EmployeeController extends Controller
 
                 return '<div class="action_icon">'. $edit_icon . $info_icon .'</div>';
             })
-            ->rawColumns(['is_present', 'action', 'profile_img'])    
+            ->rawColumns(['is_present', 'action', 'profile_img', 'role_name'])    
             ->toJson();
     }
 }

@@ -15,9 +15,10 @@
                     <th class="text-center no_sort">Phone</th>
                     <th class="text-center no_sort">Email</th>
                     <th class="text-center">Department</th>
+                    <th class="text-center">Role Or Designation</th>
                     <th class="text-center no_sort no_search">Is Present?</th>
                     <th class="text-center no_sort no_search">Action</th>
-                    <th class="text-center hidden no_search">Updated At</th>
+                    <th class="text-center hidden">Updated At</th>
                 </thead>
             </table>
         </div>
@@ -38,6 +39,7 @@
                 {data: 'phone', name: 'phone', class: 'text-center'},
                 {data: 'email', name: 'email', class: 'text-center'},
                 {data: 'department_name', name: 'department_name', class: 'text-center'},
+                {data: 'role_name', name: 'role_name', class: 'text-center'},
                 {data: 'is_present', name: 'is_present', class: 'text-center'},
                 {data: 'action', name: 'action', class: 'text-center'},
                 {data: 'updated_at', name: 'updated_at', class: 'text-center'},
@@ -49,7 +51,7 @@
                 },
                 "processing": "<img src='/images/loading.gif' style='width:50px'><p class='my-3'>Loading...</p>",
             },
-            order : [[ 8 , "desc"]],
+            order : [[ 9 , "desc"]],
             columnDefs: [
               {
                   targets: 'hidden',

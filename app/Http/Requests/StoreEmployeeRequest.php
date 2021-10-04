@@ -33,6 +33,7 @@ class StoreEmployeeRequest extends FormRequest
             'birthday' => 'required',
             'address' => 'required',
             'department_id' => 'required',
+            'roles' => 'required',
             'date_of_join' => 'required',
             'is_present' => 'required',
             'password' => 'required|min:6|max:20',

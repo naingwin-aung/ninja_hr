@@ -36,6 +36,7 @@ class UpdateEmployeeRequest extends FormRequest
             'address' => 'required',
             'department_id' => 'required',
             'date_of_join' => 'required',
+            'roles' => 'required',
             'is_present' => 'required',
             'password' => 'nullable|min:6|max:20',
             'profile_img' => 'nullable|image'

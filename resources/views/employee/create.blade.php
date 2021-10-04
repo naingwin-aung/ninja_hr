@@ -59,9 +59,20 @@
                 <div class="mb-4">
                     <label>Department</label><br/>
                 </div>
-                <select name="department_id" class="form-control">
+                <select name="department_id" class="select_ninja form-control">
+                    <option value="" selected disabled>Select Department Name</option>
                     @foreach ($departments as $department)
                     <option value="{{$department->id}}">{{$department->title}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="md-form">
+                <div class="mb-4">
+                    <label>Role Or Designation</label><br/>
+                </div>
+                <select name="roles[]" class="select_ninja form-control" multiple>
+                    @foreach ($roles as $role)
+                        <option value="{{$role->id}}">{{$role->name}}</option>
                     @endforeach
                 </select>
             </div>

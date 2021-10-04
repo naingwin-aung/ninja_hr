@@ -2,7 +2,7 @@
 @section('title', 'Profile')
 
 @section('content')
-    <div class="card">
+    <div class="card mb-3">
         <div class="card-body">
             <div class="row mb-4 justify-content-center">
                 <div class="col-md-6 col-sm-12 mb-3">
@@ -13,6 +13,13 @@
                                 <h4 class="mb-2">{{$employee->name}}</h4>
                                 <p class="mb-2"><span class="text-muted"># {{$employee->employee_id}}</span> | <span class="text-theme">{{$employee->phone}}</span></p>
                                 <p class="text-muted badge badge-pill badge-light mb-0">{{$employee->department ? $employee->department->title : ' - '}}</p>
+                                <p class="text-muted mb-0 mt-2">
+                                    @foreach ($employee->roles as $role)
+                                        <span class="badge badge-pill badge-primary">
+                                            {{$role->name}}
+                                        </span>
+                                    @endforeach
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -37,4 +44,34 @@
             </div>
         </div>
     </div>
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-end">
+                <a href="#" class="logout-btn btn btn-theme"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <form action="{{route('logout')}}" method="POST" id="logout_form">
+                    @csrf
+                </form>
+            </div>
+        </div>
+    </div>
+@endsection
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('.logout-btn').click(function(e) {
+                e.preventDefault();
+                swal({
+                    text: "You want to logout?",
+                    icon: "info",
+                    buttons: true,
+                    dangerMode: true,
+                    })
+                    .then((willLogout) => {
+                    if (willLogout) {
+                        $('#logout_form').submit();
+                    }
+                });
+            })
+        })
+    </script>
 @endsection

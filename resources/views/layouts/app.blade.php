@@ -22,11 +22,13 @@
     <!--Databale -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.2/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    
-
     {{-- Responsive Datatable --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.2.8/css/rowReorder.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+    {{-- Select 2 --}}
+    {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css"> --}}
+    <link href="https://cdn.jsdelivr.net/gh/djibe/material@4.5.3-rc3/css/material-plugins.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="page-wrapper chiller-theme">
@@ -65,18 +67,26 @@
                     <span>Home</span>
                   </a>
                 </li>
-                <li>
-                  <a href="{{route('employee.index')}}">
-                    <i class="fa fa-user"></i>
-                    <span>Employees</span>
-                  </a>
-                </li>
+
+                @can('view_employee')
+                  <li>
+                    <a href="{{route('employee.index')}}">
+                      <i class="fa fa-user"></i>
+                      <span>Employees</span>
+                    </a>
+                  </li>
+                @endcan
+
+                @can('view_department')
                 <li>
                   <a href="{{route('department.index')}}">
                     <i class="fa fa-sitemap"></i>
                     <span>Department</span>
                   </a>
                 </li>
+                @endcan
+                
+                @can('view_role')
                 <li>
                   <a href="{{route('role.index')}}">
                     <i class="fa fa-shield-alt"></i>
@@ -84,11 +94,15 @@
                   </a>
                 </li>
                 <li>
+                @endcan
+                
+                @can('view_permission') 
                   <a href="{{route('permission.index')}}">
                     <i class="fa fa-user-shield"></i>
                     <span>Permission</span>
                   </a>
                 </li>
+                @endcan
                 {{-- <li class="sidebar-dropdown">
                   <a href="#">
                     <i class="fa fa-shopping-cart"></i>
@@ -172,6 +186,8 @@
       </div>
    <!-- JQuery -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{-- Select 2 --}}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <!-- Bootstrap tooltips -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
 <!-- Bootstrap core JavaScript -->
@@ -191,15 +207,11 @@
 
 <!-- Laravel Javascript Validation -->
 <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
-
-
 {{-- Sweet Alert 2 --}}
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 {{-- Sweet Alert 1 --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 {{-- Responsive DataTable --}}
-
 <script src="https://cdn.datatables.net/rowreorder/1.2.8/js/dataTables.rowReorder.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 @yield('script')
@@ -301,6 +313,9 @@
       $.extend(true, $.fn.dataTable.defaults, {
           mark: true,
       });
+
+        $('.select_ninja').select2({
+        });
     });
 </script>
 </body>
