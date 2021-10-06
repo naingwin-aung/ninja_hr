@@ -19,17 +19,29 @@ class RoleController extends Controller
 {
     public function index()
     {
+        if(!Auth::user()->can('view_role')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         return view('role.index');
     }
 
     public function create()
     {
+        if(!Auth::user()->can('create_role')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         $permissions = Permission::get();
         return view('role.create', compact('permissions'));
     }
 
     public function store(StoreRoleRequest $request)
     {
+        if(!Auth::user()->can('create_role')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         $role = Role::create($request->only('name'));
         $role->givePermissionTo($request->permissions);
 
@@ -38,12 +50,20 @@ class RoleController extends Controller
 
     public function edit(Role $role)
     {
+        if(!Auth::user()->can('edit_role')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         $permissions = Permission::get();
         $old_permission = $role->permissions->pluck('id')->toArray();
         return view('role.edit', compact('role', 'permissions', 'old_permission'));
     }
 
     public function update($id, UpdateRoleRequest $request) {
+        if(!Auth::user()->can('edit_role')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         $role = Role::findOrFail($id);
         $old_permission = $role->permissions->pluck('name')->toArray();
         $role->revokePermissionTo($old_permission);
@@ -56,12 +76,20 @@ class RoleController extends Controller
 
     public function destroy(Role $role) 
     {
+        if(!Auth::user()->can('delete_role')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         $role->delete();
         return 'success';
     }
 
     public function ssd()
     {
+        if(!Auth::user()->can('view_role')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         $roles = Role::query();
         return datatables($roles)
             ->addColumn('plus-icon', function($each) {
@@ -80,8 +108,17 @@ class RoleController extends Controller
                     Carbon::parse($each->updated_at)->format('H:i:s A');
             })
             ->addColumn('action', function($each) {
-                $edit_icon = '<a href="'.route('role.edit', $each->id).'" class="text-warning"><i class="fas fa-user-edit"></i></a>';
-                $delete_icon = '<a href="#" class="text-danger delete_btn" data-id="'.$each->id.'"><i class="fas fa-trash"></i></a>';
+                $edit_icon = '';
+                $delete_icon = '';
+
+                if(Auth::user()->can('edit_role')) {
+                    $edit_icon = '<a href="'.route('role.edit', $each->id).'" class="text-warning"><i class="fas fa-user-edit"></i></a>';
+                }
+
+                if(Auth::user()->can('delete_role')) {
+                    $delete_icon = '<a href="#" class="text-danger delete_btn" data-id="'.$each->id.'"><i class="fas fa-trash"></i></a>';
+                }
+                
                 return '<div class="action_icon">'. $edit_icon . $delete_icon .'</div>';
             })
             ->rawColumns(['action', 'permissions'])    

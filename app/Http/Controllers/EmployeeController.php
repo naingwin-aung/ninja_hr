@@ -17,11 +17,19 @@ class EmployeeController extends Controller
 {
     public function index()
     {
+        if(!Auth::user()->can('view_employee')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         return view('employee.index');
     }
 
     public function create()
     {
+        if(!Auth::user()->can('create_employee')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         $roles = Role::get();
         $departments = Department::orderBy('title')->get();
         return view('employee.create', compact('departments', 'roles'));
@@ -29,6 +37,10 @@ class EmployeeController extends Controller
 
     public function store(StoreEmployeeRequest $request)
     {
+        if(!Auth::user()->can('create_employee')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         $profile_img_name = null;
 
         if($request->hasFile('profile_img')) {
@@ -63,6 +75,10 @@ class EmployeeController extends Controller
 
     public function edit(User $employee)
     {
+        if(!Auth::user()->can('edit_employee')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         $departments = Department::orderBy('title')->get();
         $roles = Role::get();
         $old_roles = $employee->roles->pluck('id')->toArray();
@@ -70,6 +86,10 @@ class EmployeeController extends Controller
     }
 
     public function update($id, UpdateEmployeeRequest $request) {
+        if(!Auth::user()->can('edit_employee')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         $employee = User::findOrFail($id);
 
         $profile_img_name = $employee->profile_img;
@@ -95,17 +115,29 @@ class EmployeeController extends Controller
 
     public function show(User $employee)
     {   
+        if(!Auth::user()->can('view_employee')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         return view('employee.show', compact('employee'));
     }
 
     public function destroy(User $employee) 
     {
+        if(!Auth::user()->can('delete_employee')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         $employee->delete();
         return 'success';
     }
 
     public function ssd()
     {
+        if(!Auth::user()->can('view_employee')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         $employees = User::with('department');
         return datatables($employees)
             ->filterColumn('department_name', function($query, $keyword) {
@@ -142,11 +174,23 @@ class EmployeeController extends Controller
                 return '<img src="'.$each->profile_img_path().'" class="profile_thumbnail" /><p class="my-1">'.$each->name.'</p>';
             })
             ->addColumn('action', function($each) {
-                $edit_icon = '<a href="'.route('employee.edit', $each->id).'" class="text-warning"><i class="fas fa-user-edit"></i></a>';
-                $info_icon = '<a href="'.route('employee.show', $each->id).'" class="text-primary"><i class="fas fa-info-circle"></i></a>';
+                $edit_icon = '';
+                $info_icon = '';
+                $delete_icon = '';
+
+                if(Auth::user()->can('edit_employee')) {
+                    $edit_icon = '<a href="'.route('employee.edit', $each->id).'" class="text-warning"><i class="fas fa-user-edit"></i></a>';
+                }
+
+                if(Auth::user()->can('view_employee')) { 
+                    $info_icon = '<a href="'.route('employee.show', $each->id).'" class="text-primary"><i class="fas fa-info-circle"></i></a>';
+                }
+
+                if(Auth::user()->can('delete_employee')) {
+                    $delete_icon = '<a href="#" class="text-danger delete_btn" data-id="'.$each->id.'"><i class="fas fa-trash"></i></a>';
+                }
 
                 if($each->id !== Auth::user()->id) {
-                    $delete_icon = '<a href="#" class="text-danger delete_btn" data-id="'.$each->id.'"><i class="fas fa-trash"></i></a>';
                     return '<div class="action_icon">'. $edit_icon . $info_icon . $delete_icon .'</div>';
                 }
 

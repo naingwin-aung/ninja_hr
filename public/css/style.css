@@ -660,3 +660,7 @@ mark{
 .mark, mark {
   padding: 0px !important;
 }
+
+.daterangepicker .drp-buttons .btn {
+  font-size: 12px!important;
+}

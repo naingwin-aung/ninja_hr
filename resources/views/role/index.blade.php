@@ -2,9 +2,11 @@
 @section('title', 'Role')
 
 @section('content')
-<div>
-    <a href="{{route("role.create")}}" class="btn btn-theme btn-sm"><i class="fas fa-plus-circle"></i> CREATE Role</a>
-</div>
+@can('create_role')
+    <div>
+        <a href="{{route("role.create")}}" class="btn btn-theme btn-sm"><i class="fas fa-plus-circle"></i> CREATE Role</a>
+    </div>
+@endcan
     <div class="card main-content">
         <div class="card-body">
             <table class="table table-bordered" id="datatable" style="width:100%;">

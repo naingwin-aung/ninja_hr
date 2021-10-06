@@ -2,9 +2,11 @@
 @section('title', 'Permission')
 
 @section('content')
-<div>
-    <a href="{{route("permission.create")}}" class="btn btn-theme btn-sm"><i class="fas fa-plus-circle"></i> CREATE Permission</a>
-</div>
+@can('create_permission')
+    <div>
+        <a href="{{route("permission.create")}}" class="btn btn-theme btn-sm"><i class="fas fa-plus-circle"></i> CREATE Permission</a>
+    </div>
+@endcan
     <div class="card main-content">
         <div class="card-body">
             <table class="table table-bordered" id="datatable" style="width:100%;">

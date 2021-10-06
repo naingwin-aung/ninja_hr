@@ -15,16 +15,28 @@ class DepartmentController extends Controller
 {
     public function index()
     {
+        if(!Auth::user()->can('view_department')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         return view('department.index');
     }
 
     public function create()
     {
+        if(!Auth::user()->can('create_department')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         return view('department.create');
     }
 
     public function store(StoreDepartmentRequest $request)
     {
+        if(!Auth::user()->can('create_department')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         Department::create($request->only('title'));
 
         return redirect()->route('department.index')->with('create', 'Department is Successfully Create');
@@ -32,10 +44,18 @@ class DepartmentController extends Controller
 
     public function edit(Department $department)
     {
+        if(!Auth::user()->can('edit_department')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         return view('department.edit', compact('department'));
     }
 
     public function update($id, UpdateDepartmentRequest $request) {
+        if(!Auth::user()->can('edit_department')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         $department = Department::findOrFail($id);
         $department->update($request->only('title'));
 
@@ -44,12 +64,20 @@ class DepartmentController extends Controller
 
     public function destroy(Department $department) 
     {
+        if(!Auth::user()->can('delete_department')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         $department->delete();
         return 'success';
     }
 
     public function ssd()
     {
+        if(!Auth::user()->can('view_department')) {
+            abort(403, 'Unauthorized Action');
+        }
+
         $departments = Department::query();
         return datatables($departments)
             ->addColumn('plus-icon', function($each) {
@@ -61,8 +89,17 @@ class DepartmentController extends Controller
                     Carbon::parse($each->updated_at)->format('H:i:s A');
             })
             ->addColumn('action', function($each) {
-                $edit_icon = '<a href="'.route('department.edit', $each->id).'" class="text-warning"><i class="fas fa-user-edit"></i></a>';
-                $delete_icon = '<a href="#" class="text-danger delete_btn" data-id="'.$each->id.'"><i class="fas fa-trash"></i></a>';
+                $edit_icon = '';
+                $delete_icon = '';
+                
+                if(Auth::user()->can('edit_department')) {
+                    $edit_icon = '<a href="'.route('department.edit', $each->id).'" class="text-warning"><i class="fas fa-user-edit"></i></a>';
+                }
+
+                if(Auth::user()->can('delete_department')) {
+                    $delete_icon = '<a href="#" class="text-danger delete_btn" data-id="'.$each->id.'"><i class="fas fa-trash"></i></a>';
+                }
+
                 return '<div class="action_icon">'. $edit_icon . $delete_icon .'</div>';
             })
             ->rawColumns(['action'])    

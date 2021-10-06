@@ -29,6 +29,8 @@
     {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css"> --}}
     <link href="https://cdn.jsdelivr.net/gh/djibe/material@4.5.3-rc3/css/material-plugins.min.css" rel="stylesheet">
+
+    @yield('extra_css')
 </head>
 <body>
     <div class="page-wrapper chiller-theme">
@@ -67,6 +69,15 @@
                     <span>Home</span>
                   </a>
                 </li>
+
+                @can('view_company_setting')
+                  <li>
+                    <a href="{{route('company-setting.show', 1)}}">
+                      <i class="fa fa-building"></i>
+                      <span>Company Setting</span>
+                    </a>
+                  </li>
+                @endcan
 
                 @can('view_employee')
                   <li>
